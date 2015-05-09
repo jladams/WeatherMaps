@@ -2,15 +2,12 @@
 <html>
 	<head>
 		<title>Oklahoma Weather</title>
-
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
 		<link rel="stylesheet" href="https://raw.githubusercontent.com/domoritz/leaflet-locatecontrol/gh-pages/dist/L.Control.Locate.min.css" />
 		<style>
-		    html, body {
+		    html, body, #map {
 		        height: 100%;
-		    }
-		    #map {
-		        height: 98%;
 		    }
 		</style>
         <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
@@ -180,6 +177,7 @@
 
             // Location Controls
 			var lc = L.control.locate({
+			    keepCurrentZoomLevel: true,
 				locateOptions: {
 					maxZoom: 11
 				}
