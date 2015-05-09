@@ -217,7 +217,8 @@
             L.control.layers(baseLayers, overlays).addTo(map);
             
 			// Scale
-			L.control.scale().addTo(map);
+			L.control.scale({position: 'topright'}).addTo(map);
+			
 		</script>
 	</body>
 </html>

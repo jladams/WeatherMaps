@@ -208,10 +208,8 @@
             
             L.control.layers(baseLayers, overlays).addTo(map);
 		    
-		    //Opens tweet popups on load
-		    tweets.eachLayer(function(m) {
-			    m.openPopup();
-			});
+		    // Scale
+			L.control.scale({position: 'topright'}).addTo(map);
 
 		</script>
 	</body>
