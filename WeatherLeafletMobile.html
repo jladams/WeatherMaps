@@ -177,11 +177,11 @@
             // Location Controls
 			var lc = L.control.locate({
 			    keepCurrentZoomLevel: true,
+			    icon: "icon-location",
 				locateOptions: {
 					maxZoom: 11
 				}
 			}).addTo(map);
-			
 			
 			map.on('dragstart', lc._stopFollowing, lc);
 			
@@ -205,12 +205,9 @@
             	};
 
             L.control.layers(baseLayers, overlays).addTo(map);
-		    
-		    //Opens tweet popups on load
-		    tweets.eachLayer(function(m) {
-			    m.openPopup();
-			});
-
+            
+			// Scale
+			L.control.scale().addTo(map);
 		</script>
 	</body>
 </html>
