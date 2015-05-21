@@ -174,7 +174,9 @@
 
             // Location Controls
 			var lc = L.control.locate({
+				follow: true,
 			    keepCurrentZoomLevel: true,
+			    stopFollowingOnDrag: false,
 				locateOptions: {
 					enableHighAccuracy: true,
 					maxZoom: 11
