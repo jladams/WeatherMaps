@@ -175,11 +175,11 @@
             // Location Controls
 			var lc = L.control.locate({
 				follow: true,
-			    // keepCurrentZoomLevel: true,
+			     keepCurrentZoomLevel: true,
 			    stopFollowingOnDrag: false,
 				locateOptions: {
-					enableHighAccuracy: true,
-					maxZoom: 11
+					enableHighAccuracy: true
+					// maxZoom: 11
 				}
 			}).addTo(map);
 			
