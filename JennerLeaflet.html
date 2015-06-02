@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Jenner Tweets</title>
+        <META HTTP-EQUIV="refresh" CONTENT="20">
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+		<style>
+		    html, body {
+		        height: 100%;
+		    }
+		    #map {
+		        height: 98%;
+		    }
+		</style>
+        <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+        <script src="https://www.dropbox.com/s/drrhiqmuinu6s1m/jenner_tweets.js?raw=1" type="text/javascript"></script>
+	</head>
+
+	<body>
+			
+			<div id="map"></div>
+			
+						
+			<script>
+			//Extend Map class to allow multiple popups to be open
+			L.Map = L.Map.extend({
+                openPopup: function(popup) {
+                    // this.closePopup(); 
+                    this._popup = popup;
+                    return this.addLayer(popup).fire('popupopen', {
+                        popup: this._popup
+                    });
+                 }
+            });
+			
+		    var map = L.map('map', {zoomControl:false}).setView([20.2, -10.5], 2);
+		    
+		    //Map Base Tiles
+		    var darkbase = L.tileLayer('http://{s}.tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png', {
+	                        attribution: '&copy; <a href="http://www.opencyclemap.org">OpenCycleMap</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                            }).addTo(map);		
+										    
+		    //Tweets
+            var tweets = L.geoJson(jennertweets, {
+     					    onEachFeature: function (feature, layer) {
+         				    layer.bindPopup("<b><font size='3'>" + feature.properties.screen_name + "</b><br>" + feature.properties.text + "</font>", {
+         				        autoPan: false,
+         				        closeButton: false
+         				        })
+     					    }
+ 			           }).addTo(map);
+
+		    //Opens tweet popups on load
+		    tweets.eachLayer(function(m) {
+			    m.openPopup();
+			});
+            
+            //Refreshes tweet layer
+            //setInterval(function(){refreshTweets()}, 20000);
+
+			
+		</script>
+	</body>
+</html>
