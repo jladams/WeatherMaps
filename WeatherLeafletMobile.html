@@ -53,13 +53,12 @@
 							subdomains: '1234'
 							});
 
-			var overlay = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
+			var roads = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
 	                        type: 'hyb',
 	                        ext: 'png',
 	                        attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 	                        subdomains: '1234',
-	                        opacity: 0.9,
-	                        z-index: 10
+	                        opacity: 0.9
                             });	
 							     
 		    //Weather Tiles
@@ -198,8 +197,8 @@
 			//Layer Groups
 			var temps = L.layerGroup([temp1, temp2, temp3]);
 			var windvectors = L.layerGroup([windvectors1, windvectors5, windvectors10, windvectors15]);		
-			var satellite = L.layerGroup([satellite1, overlay]);			
-			var nighttime = L.layerGroup([night1, overlay]);			
+			var satellite = L.layerGroup([satellite1, roads]);			
+			var nighttime = L.layerGroup([night1, roads]);			
 
             // Location Controls
 			var lc = L.control.locate({
@@ -218,8 +217,8 @@
             var baseLayers = {
             	"Light Base" : lightbase,
             	"Dark Base" : darkbase,
-            	"Satellite" : satellite,
-            	"Night Time" : nighttime
+            	"Satellite" : satellite1,
+            	"Night Time" : night1
             	};
             	
             var overlays = {
@@ -233,7 +232,8 @@
             	"Flash Flood Warnings" : flashfloodwarn,
             	"Wind Direction and Speed" : wind,
             	"Wind Vectors" : windvectors,
-            	"1 Hour Precipitation Accumulation" : precip1
+            	"1 Hour Precipitation Accumulation" : precip1,
+            	"Alternate Labels" : roads
             	};
 
             L.control.layers(baseLayers, overlays).addTo(map);
