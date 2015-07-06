@@ -30,18 +30,36 @@
 							ext: 'jpg',
 							attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 							subdomains: '1234'
-							}).addTo(map);
+							});
 		    
 		    var darkbase = L.tileLayer('http://{s}.tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png', {
 	                        attribution: '&copy; <a href="http://www.opencyclemap.org">OpenCycleMap</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                            }).addTo(map);
+		    
+            var night1 = L.tileLayer('http://map1.vis.earthdata.nasa.gov/wmts-webmerc/VIIRS_CityLights_2012/default/{time}/{tilematrixset}{maxZoom}/{z}/{y}/{x}.{format}', {
+	                        attribution: 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
+	                        bounds: [[-85.0511287776, -179.999999975], [85.0511287776, 179.999999975]],
+	                        minZoom: 1,
+	                        maxZoom: 8,
+	                        format: 'jpg',
+	                        time: '',
+	                        tilematrixset: 'GoogleMapsCompatible_Level'
                             });
 		        			
-			var satellite = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
+			var satellite1 = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
 							type: 'sat',
 							ext: 'jpg',
 							attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency',
 							subdomains: '1234'
 							});
+
+			var overlay = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
+	                        type: 'hyb',
+	                        ext: 'png',
+	                        attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	                        subdomains: '1234',
+	                        opacity: 0.9
+                            });	
 							     
 		    //Weather Tiles
 		    //Radar 
@@ -167,10 +185,20 @@
 							transparent: true,
 							opacity: 0.5,
 							});	
+
+			// Precipitation Analysis
+			var precip1 = L.tileLayer.wms("http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/analyses?service=wms&version=1.1.1", { 
+							layers: 'RTMA_RAS_QPE_1HR',
+							format: 'image/png',
+							transparent: true,
+							opacity: 0.5,
+							});
 			
 			//Layer Groups
 			var temps = L.layerGroup([temp1, temp2, temp3]);
-			var windvectors = L.layerGroup([windvectors1, windvectors5, windvectors10, windvectors15]);			
+			var windvectors = L.layerGroup([windvectors1, windvectors5, windvectors10, windvectors15]);		
+			var satellite = L.layerGroup([satellite1, overlay]);			
+			var nighttime = L.layerGroup([night1, overlay]);			
 
             // Location Controls
 			var lc = L.control.locate({
@@ -189,7 +217,8 @@
             var baseLayers = {
             	"Light Base" : lightbase,
             	"Dark Base" : darkbase,
-            	"Satellite" : satellite
+            	"Satellite" : satellite,
+            	"Night Time" : nighttime
             	};
             	
             var overlays = {
@@ -203,6 +232,7 @@
             	"Flash Flood Warnings" : flashfloodwarn,
             	"Wind Direction and Speed" : wind,
             	"Wind Vectors" : windvectors,
+            	"1 Hour Precipitation Accumulation" : precip1
             	};
 
             L.control.layers(baseLayers, overlays).addTo(map);
