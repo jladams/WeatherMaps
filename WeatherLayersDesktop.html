@@ -3,6 +3,7 @@
 	<head>
 		<title>Oklahoma Weather for Desktop</title>
 		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+		<link rel="stylesheet" href="Leaflet.StyledLayerControl/css/styledLayerControl.css" />
 		<style>
 		    html, body {
 		        height: 100%;
@@ -12,6 +13,7 @@
 		    }
 		</style>
         <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+		<script src="Leaflet.StyledLayerControl/src/styledLayerControl.js"></script>
 	</head>
 
 	<body>
@@ -20,7 +22,7 @@
 			
 						
 			<script>			
-		    var map = L.map('map').setView([35.2, -97.5], 9);
+		    var map = L.map('map').setView([35.2, -97.5], 5);
 		    
 		    //Map Base Tiles
 			var lightbase = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
@@ -28,23 +30,11 @@
 							ext: 'jpg',
 							attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 							subdomains: '1234'
-							});
-		    
-		    var darkbase = L.tileLayer('http://{s}.tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png', {
-	                        attribution: '&copy; <a href="http://www.opencyclemap.org">OpenCycleMap</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-                            }).addTo(map);
-		    
-            var night1 = L.tileLayer('http://map1.vis.earthdata.nasa.gov/wmts-webmerc/VIIRS_CityLights_2012/default/{time}/{tilematrixset}{maxZoom}/{z}/{y}/{x}.{format}', {
-	                        attribution: 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
-	                        bounds: [[-85.0511287776, -179.999999975], [85.0511287776, 179.999999975]],
-	                        minZoom: 1,
-	                        maxZoom: 8,
-	                        format: 'jpg',
-	                        time: '',
-	                        tilematrixset: 'GoogleMapsCompatible_Level'
-                            });
-		        			
-			var satellite1 = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
+							});		    
+		    var darkbase = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+	                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+		        			}).addTo(map);
+			var satellite = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
 							type: 'sat',
 							ext: 'jpg',
 							attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency',
@@ -60,187 +50,246 @@
                             });		     
 		     
 		    //Weather Tiles
-		    //Radar 
-			var radar = L.tileLayer.wms("http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/obs", {
-							layers: 'RAS_RIDGE_NEXRAD',
-							format: 'image/png',
-							transparent: true,
-							opacity: 0.5,
-							attribution: "Weather data from NOAA/NOS nowCoast"
-							}).addTo(map);
-					   		  
-			//Tornado Warnings	
-			var tornadowarn = L.tileLayer.wms("http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/wwa", {
-							layers: 'WARN_SHORT_TOR',
-							format: 'image/png',
-							transparent: true,
-							opacity: 0.5,
-							attribution: "Weather data from NOAA/NOS nowCoast"
-							}).addTo(map);
-			
-			//Extreme Wind Warnings	
-			var windwarn = L.tileLayer.wms("http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/wwa", {
-							layers: 'WARN_SHORT_EWW',
-							format: 'image/png',
-							transparent: true,
-							opacity: 0.5,
-							attribution: "Weather data from NOAA/NOS nowCoast"
-							}).addTo(map);
-			
-			//Severe Weather Warnings    
-			var severewarn = L.tileLayer.wms("http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/wwa", {
-							layers: 'WARN_SHORT_SVR',
-							format: 'image/png',
-							transparent: true,
-							opacity: 0.5,
-							attribution: "Weather data from NOAA/NOS nowCoast"
-							}).addTo(map);
-			
-			//Flood Warnings
-			var floodwarn = L.tileLayer.wms("http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/wwa", {
-							layers: 'WARN_SHORT_FLW',
-							format: 'image/png',
-							transparent: true,
-							opacity: 0.5,
-							attribution: "Weather data from NOAA/NOS nowCoast"
-							}).addTo(map);
-							
-			//Flash Flood Warnings	
-			var flashfloodwarn = L.tileLayer.wms("http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/wwa", {
-							layers: 'WARN_SHORT_FFW',
-							format: 'image/png',
-							transparent: true,
-							opacity: 0.5,
-							attribution: "Weather data from NOAA/NOS nowCoast"
-							}).addTo(map);
-			
-			//Clouds	
-			var clouds = L.tileLayer.wms("http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/obs", {
-							layers: 'RAS_GOES_I4',
-							format: 'image/png',
-							transparent: true,
-							opacity: 0.4,
-							attribution: "Weather data from NOAA/NOS nowCoast"
-							});
-		    
-		    //Temperature
-			var temp1 = L.tileLayer.wms("http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/obs", {
-							layers: 'OBS_MET_TEMP',
-							format: 'image/png',
-							transparent: true,
-							opacity: 0.5,
-							attribution: "Weather data from NOAA/NOS nowCoast"
-							}); 
-		    
-		    var temp2 = L.tileLayer.wms("http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/analyses?service=wms&version=1.1.1", {
-							layers: 'RTMA_RAS_AIRTEMP',
-							format: 'image/png',
-							transparent: true,
-							opacity: 0.3,
-							attribution: "Weather data from NOAA/NOS nowCoast"
-							});	
-								
-		    var temp3 = L.tileLayer.wms("http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/analyses?service=wms&version=1.1.1", {
-							layers: 'RTMA_POLY_AIRTEMP',
-							format: 'image/png',
-							transparent: true,
-							opacity: 0.3,
-							attribution: "Weather data from NOAA/NOS nowCoast"
-							});								
-									        
-		    //Wind speed and direction
-		    var wind = L.tileLayer.wms("http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/obs", {
-							layers: 'OBS_MET_WIND',
-							format: 'image/png',
-							transparent: true,
-							attribution: "Weather data from NOAA/NOS nowCoast"
-							});	
-			
-			var windvectors1 = L.tileLayer.wms("http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/analyses?service=wms&version=1.1.1", {
-							layers: 'RTMA_PT_WINDVECT_01',
-							format: 'image/png',
-							transparent: true,
-							opacity: 0.5,
-							});	
 
-			var windvectors5 = L.tileLayer.wms("http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/analyses?service=wms&version=1.1.1", {
-							layers: 'RTMA_PT_WINDVECT_05',
-							format: 'image/png',
-							transparent: true,
-							opacity: 0.5,
-							});								
+//			Lightning Density
+			var lightning = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/sat_meteo_emulated_imagery_lightningstrikedensity_goes_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '1',
+    			opacity: "0.7",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			});					   		  		
 
-			var windvectors10 = L.tileLayer.wms("http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/analyses?service=wms&version=1.1.1", {
-							layers: 'RTMA_PT_WINDVECT_10', 
-							format: 'image/png',
-							transparent: true,
-							opacity: 0.5,
-							});
-							
-			var windvectors15 = L.tileLayer.wms("http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/analyses?service=wms&version=1.1.1", { 
-							layers: 'RTMA_PT_WINDVECT_15',
-							format: 'image/png',
-							transparent: true,
-							opacity: 0.5,
-							});
-								
-			// Precipitation Analysis
-			var precip1 = L.tileLayer.wms("http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/analyses?service=wms&version=1.1.1", { 
-							layers: 'RTMA_RAS_QPE_1HR',
-							format: 'image/png',
-							transparent: true,
-							opacity: 0.5,
-							});
+//			GOES Imagery            
+			var visiblegoes = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/sat_meteo_imagery_goes_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '1',
+    			opacity: "0.7",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			});	
+			var watervaporgoes = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/sat_meteo_imagery_goes_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '5',
+    			opacity: "0.7",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			});
+			var irgoes = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/sat_meteo_imagery_goes_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '9',
+    			opacity: "0.7",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			});
+			
+//			NEXRAD Imagery			
+			var radar = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/radar_meteo_imagery_nexrad_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '1',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			}).addTo(map);
 
-			// Legends 
-			var radarlegend = L.control({position: 'bottomleft'});
+//			Watches			
+			var tornadowatch = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteoceanhydro_shortduration_hazards_watches_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '2',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			}).addTo(map);				
+			var thunderwatch = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteoceanhydro_shortduration_hazards_watches_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '1',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			}).addTo(map);	
+			var flashfloodwatch = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteoceanhydro_shortduration_hazards_watches_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '0',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			}).addTo(map);	
 			
-			radarlegend.onAdd = function (map) {
-    			var div = L.DomUtil.create('div', 'info legend');
-        		div.innerHTML +=
-        		'<img src="http://nowcoast.noaa.gov/LayerInfo?layer=RAS_RIDGE_NEXRAD&data=legend" alt="legend">';
-    			return div;
-   			 };
-   			 radarlegend.addTo(map);
+//			Warnings
+			var tornadowarning = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteoceanhydro_shortduration_hazards_warnings_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '3',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			}).addTo(map);			
+			var windwarning = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteoceanhydro_shortduration_hazards_warnings_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '2',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			}).addTo(map);	
+			var thunderwarning = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteoceanhydro_shortduration_hazards_warnings_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '1',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			}).addTo(map);	
+			var flashfloodwarning = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteoceanhydro_shortduration_hazards_warnings_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '0',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			}).addTo(map);	
 
-			var preciplegend = L.control({position: 'bottomleft'});
-			
-			preciplegend.onAdd = function (map) {
-    			var div = L.DomUtil.create('div', 'info legend');
-        		div.innerHTML +=
-        		'<img src="http://nowcoast.noaa.gov/LayerInfo?layer=RTMA_RAS_QPE_1HR&data=legend" alt="legend">';
-    			return div;
-   			 };
-   			 preciplegend.addTo(map);
-			
-			//Layer Groups
-			var temps = L.layerGroup([temp1, temp2, temp3]);
-			var windvectors = L.layerGroup([windvectors1, windvectors5, windvectors10, windvectors15]);		
-            
+//          Long-Term Hazards
+			var airquality = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteoceanhydro_longduration_hazards_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '1',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			});			
+			var coldheathazard = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteoceanhydro_longduration_hazards_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '7',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			});	
+			var wildfire = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteoceanhydro_longduration_hazards_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '4',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			});	
+			var surfacewindhazard = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteoceanhydro_longduration_hazards_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '38',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			});	
+			var snowhazard = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteoceanhydro_longduration_hazards_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '10',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			});	
+			var floodinghazard = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteoceanhydro_longduration_hazards_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '24,27',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			});
+			var observedswath = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteocean_tropicalcyclones_trackintensityfcsts_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '2',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			});		
+			var observedtrackline = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteocean_tropicalcyclones_trackintensityfcsts_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '3',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			});
+			var observedcenter = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteocean_tropicalcyclones_trackintensityfcsts_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '4',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			});
+			var uncertaintycone = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteocean_tropicalcyclones_trackintensityfcsts_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '6',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			});
+			var forecasttrackline = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteocean_tropicalcyclones_trackintensityfcsts_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '7',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			});
+			var forecastcenter = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteocean_tropicalcyclones_trackintensityfcsts_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '8',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			});
+			var cyclonewatches = L.tileLayer.wms('http://nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteocean_tropicalcyclones_trackintensityfcsts_time/MapServer/WMSServer', {
+    			format: 'image/png',
+    			transparent: true,
+    			layers: '9',
+    			opacity: "0.8",
+				attribution: "Weather data from NOAA/NOS nowCoast"
+			});															
             //Layer Control            
-            var baseLayers = {
-            	"Light Base" : lightbase,
-            	"Dark Base" : darkbase,
-            	"Satellite" : satellite1,
-            	"Night Time" : night1
-            	};
+            var baseLayers = [{
+            	groupName: "Base Maps",
+            	expanded: false,
+            	layers: {
+	            	"Light Base" : lightbase,
+    	        	"Dark Base" : darkbase,
+        	    	"Satellite" : satellite
+            	}
+            }];
             	
-            var overlays = {
-            	"Clouds" : clouds,
-            	"Radar" : radar,
-            	"Temperatures" : temps,
-            	"Tornado Warnings" : tornadowarn,
-            	"Extreme Wind Warnings" : windwarn,
-            	"Severe Thunderstorm Warnings" : severewarn,
-            	"Flood Warnings" : floodwarn,
-            	"Flash Flood Warnings" : flashfloodwarn,
-            	"Wind Direction and Speed" : wind,
-            	"Wind Vectors" : windvectors,
-            	"1 Hour Precipitation Accumulation" : precip1,
-            	"Alternate Labels" : roads
-            	};
+            var overlays = [{
+            	groupName : "Satellite / Radar Imagery",
+            	expanded : false,
+            	layers :  {
+            		"NEXRAD Radar Imagery" : radar,
+            		"Visible GOES Imagery" : visiblegoes,
+            		"Water Vapor GOES Imagery" : watervaporgoes,
+            		"Longwave IR GOES Imagery" : irgoes
+            	}}, {
+            	groupName: "Watches / Warnings",
+            	expanded: false,
+            	layers: {
+					"Tornado Watch" : tornadowatch,
+					"Tornado Warning" : tornadowarning,
+					"Severe Thunderstorm Watch" : thunderwatch,
+					"Severe Thunderstorm Warning" : thunderwarning,
+					"Flash Flood Watch" : flashfloodwatch,
+					"Flash Flood Warning" : flashfloodwarning,
+					"Flooding Hazard" : floodinghazard,
+					"Extreme Wind Warning" : windwarning,
+					"Surface Wind Hazard" : surfacewindhazard,
+					"Tropical Cyclone Watches / Warnings" : cyclonewatches,
+					"15 Minute Lightning Strike Density" : lightning,
+					"Hazardous Air Quality" : airquality,
+					"Hazardous Wildfire Conditions" : wildfire,
+					"Cold/Heat Hazards" : coldheathazard,
+					"Snow and Freezing Precipitation Hazards" : snowhazard
+            		}
+            	}, {
+            	groupName: "Tropical Cyclone",
+            	expanded: false,
+            	layers : {
+            		"Observed Surface Wind Swath" : observedswath,
+            		"Observed Track Line" : observedtrackline,
+            		"Observed Center Positions" : observedcenter,
+            		"Cone of Uncertainty" : uncertaintycone,
+            		"Forecast Track Line" : forecasttrackline,
+            		"Forecast Center Positions" : forecastcenter
+            	}	
+            }];
             
-            L.control.layers(baseLayers, overlays).addTo(map);
+            L.Control.styledLayerControl(baseLayers, overlays).addTo(map);
 		    
 		    // Scale
 			L.control.scale({position: 'topright'}).addTo(map);
