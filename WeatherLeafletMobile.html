@@ -5,7 +5,6 @@
 		<title>Oklahoma Weather</title>
     	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-		<link rel="stylesheet" href="Leaflet.StyledLayerControl/css/styledLayerControl.css" />
 		<link rel="stylesheet" href="https://raw.githubusercontent.com/domoritz/leaflet-locatecontrol/gh-pages/dist/L.Control.Locate.min.css" />
 		<style>
 		    html, body {
@@ -16,7 +15,6 @@
 		    }
 		</style>
         <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-		<script src="Leaflet.StyledLayerControl/src/styledLayerControl.js"></script>
         <script src="https://raw.githubusercontent.com/domoritz/leaflet-locatecontrol/gh-pages/dist/L.Control.Locate.min.js"></script>
 	</head>
 
@@ -234,58 +232,42 @@
 				attribution: "Weather data from NOAA/NOS nowCoast"
 			});															
             //Layer Control            
-            var baseLayers = [{
-            	groupName: "Base Maps",
-            	expanded: false,
-            	layers: {
-	            	"Light Base" : lightbase,
-    	        	"Dark Base" : darkbase,
-        	    	"Satellite" : satellite
-            	}
-            }];
+            var baseLayers = {
+	        	"Light Base" : lightbase,
+    	    	"Dark Base" : darkbase,
+        	    "Satellite" : satellite
+            };
             	
-            var overlays = [{
-            	groupName : "Satellite / Radar Imagery",
-            	expanded : false,
-            	layers :  {
-            		"NEXRAD Radar Imagery" : radar,
-            		"Visible GOES Imagery" : visiblegoes,
-            		"Water Vapor GOES Imagery" : watervaporgoes,
-            		"Longwave IR GOES Imagery" : irgoes
-            	}}, {
-            	groupName: "Watches / Warnings",
-            	expanded: false,
-            	layers: {
-					"Tornado Watch" : tornadowatch,
-					"Tornado Warning" : tornadowarning,
-					"Severe Thunderstorm Watch" : thunderwatch,
-					"Severe Thunderstorm Warning" : thunderwarning,
-					"Flash Flood Watch" : flashfloodwatch,
-					"Flash Flood Warning" : flashfloodwarning,
-					"Flooding Hazard" : floodinghazard,
-					"Extreme Wind Warning" : windwarning,
-					"Surface Wind Hazard" : surfacewindhazard,
-					"Tropical Cyclone Watches / Warnings" : cyclonewatches,
-					"15 Minute Lightning Strike Density" : lightning,
-					"Hazardous Air Quality" : airquality,
-					"Hazardous Wildfire Conditions" : wildfire,
-					"Cold/Heat Hazards" : coldheathazard,
-					"Snow and Freezing Precipitation Hazards" : snowhazard
-            		}
-            	}, {
-            	groupName: "Tropical Cyclone",
-            	expanded: false,
-            	layers : {
-            		"Observed Surface Wind Swath" : observedswath,
-            		"Observed Track Line" : observedtrackline,
-            		"Observed Center Positions" : observedcenter,
-            		"Cone of Uncertainty" : uncertaintycone,
-            		"Forecast Track Line" : forecasttrackline,
-            		"Forecast Center Positions" : forecastcenter
-            	}	
-            }];
+            var overlays = {
+        		"NEXRAD Radar Imagery" : radar,
+        		"Visible GOES Imagery" : visiblegoes,
+        		"Water Vapor GOES Imagery" : watervaporgoes,
+            	"Longwave IR GOES Imagery" : irgoes,
+				"Tornado Watch" : tornadowatch,
+				"Tornado Warning" : tornadowarning,
+				"Severe Thunderstorm Watch" : thunderwatch,
+				"Severe Thunderstorm Warning" : thunderwarning,
+				"Flash Flood Watch" : flashfloodwatch,
+				"Flash Flood Warning" : flashfloodwarning,
+				"Flooding Hazard" : floodinghazard,
+				"Extreme Wind Warning" : windwarning,
+				"Surface Wind Hazard" : surfacewindhazard,
+				"Tropical Cyclone Watches / Warnings" : cyclonewatches,
+				"15 Minute Lightning Strike Density" : lightning,
+				"Hazardous Air Quality" : airquality,
+				"Hazardous Wildfire Conditions" : wildfire,
+				"Cold/Heat Hazards" : coldheathazard,
+				"Snow and Freezing Precipitation Hazards" : snowhazard,
+            	"Observed Surface Wind Swath" : observedswath,
+        		"Observed Track Line" : observedtrackline,
+        		"Observed Center Positions" : observedcenter,
+        		"Cone of Uncertainty" : uncertaintycone,
+            	"Forecast Track Line" : forecasttrackline,
+            	"Forecast Center Positions" : forecastcenter
+            		
+            };
             
-            L.Control.styledLayerControl(baseLayers, overlays).addTo(map);
+            L.control.layers(baseLayers, overlays).addTo(map);
 
             // Location Controls
 			var lc = L.control.locate({
